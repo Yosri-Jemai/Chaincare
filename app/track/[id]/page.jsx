@@ -82,6 +82,15 @@ export default function TrackPage() {
             <span className="k">Released</span>
             <span className="v"><strong>{data.onChain.released}</strong> HBAR</span>
 
+            {/* NEW — what's still locked */}
+            <span className="k">Remaining</span>
+            <span className="v">
+              <strong style={{ color: "var(--accent)" }}>
+                {(Number(data.onChain.amount) - Number(data.onChain.released)).toFixed(4)}
+              </strong>{" "}
+              HBAR
+            </span>
+
             <span className="k">Platform fee</span>
             <span className="v">{data.onChain.platformFee} HBAR</span>
           </div>
@@ -91,9 +100,15 @@ export default function TrackPage() {
       <div className="card">
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.5rem" }}>
           <h2 style={{ fontSize: "1rem" }}>Timeline</h2>
-          <span style={{ fontSize: "0.75rem", color: "var(--text-dim)" }}>
-            {data.timeline?.length ?? 0} event{data.timeline?.length === 1 ? "" : "s"}
-          </span>
+          <a
+            href={`https://hashscan.io/testnet/topic/${process.env.NEXT_PUBLIC_HCS_TOPIC_ID}`}
+            target="_blank"
+            rel="noreferrer"
+            className="hint"
+            style={{ color: "var(--accent)", textDecoration: "none", fontWeight: 500 }}
+          >
+            View full HCS log →
+          </a>
         </div>
 
         {data.timeline && data.timeline.length > 0 ? (

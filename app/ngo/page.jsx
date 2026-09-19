@@ -1,12 +1,13 @@
+// app/ngo/page.jsx
 "use client";
 import { useEffect, useState } from "react";
 
 const EVENT_TYPES = [
-  { value: "funds_allocated",         label: "Funds allocated",           releases: false },
-  { value: "funds_used",              label: "Funds used",                releases: true  },
-  { value: "distribution_started",    label: "Distribution started",      releases: false },
-  { value: "distribution_completed",  label: "Distribution completed",    releases: true  },
-  { value: "impact_reported",         label: "Impact reported",           releases: false },
+  { value: "funds_allocated",         label: "Funds allocated",        releases: false },
+  { value: "funds_used",              label: "Funds used",             releases: true  },
+  { value: "distribution_started",    label: "Distribution started",   releases: false },
+  { value: "distribution_completed",  label: "Distribution completed", releases: false },
+  { value: "impact_reported",         label: "Impact reported",        releases: false },
 ];
 
 export default function NGOConsole() {

@@ -1,3 +1,4 @@
+// app/api/ngo-update/route.js
 import { NextResponse } from "next/server";
 import { submitHcsEvent } from "@/lib/hedera/hcs";
 import { releaseFundsOnChain } from "@/lib/hedera/contract";
@@ -9,10 +10,8 @@ export async function POST(req) {
 
     let contractTxId = null;
 
-    if (
-      (eventType === "funds_used" || eventType === "distribution_completed") &&
-      amount
-    ) {
+    // Money only moves on "funds_used". Everything else is narrative.
+    if (eventType === "funds_used" && amount) {
       const { txHash } = await releaseFundsOnChain({
         donationId,
         amountHbar: amount,
@@ -22,7 +21,9 @@ export async function POST(req) {
     }
 
     await submitHcsEvent({
-      v: 1, donationId, eventType,
+      v: 1,
+      donationId,
+      eventType,
       ngoId: ngoId ?? "ngo_alpha",
       amount: amount ?? 0,
       currency: "HBAR",
