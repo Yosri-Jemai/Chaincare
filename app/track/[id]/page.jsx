@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import { useReveal } from "@/app/hooks/useReveal";
 
@@ -13,9 +13,17 @@ const STATUS_META = [
 export default function TrackPage() {
   const { id } = useParams();
   const [data, setData] = useState(null);
+  const [ngos, setNgos] = useState([]);
   const [lastUpdate, setLastUpdate] = useState(null);
 
   useReveal([data]);
+
+  useEffect(() => {
+    fetch("/api/ngos")
+      .then((r) => r.json())
+      .then((res) => setNgos(res.ngos ?? []))
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     async function load() {
@@ -30,6 +38,11 @@ export default function TrackPage() {
     const t = setInterval(load, 3000);
     return () => clearInterval(t);
   }, [id]);
+
+  const ngo = useMemo(
+    () => ngos.find((n) => n.ngoId === data?.onChain?.ngoId),
+    [ngos, data?.onChain?.ngoId]
+  );
 
   if (!data) {
     return (
@@ -69,7 +82,17 @@ export default function TrackPage() {
 
           <div className="kv">
             <span className="k">NGO</span>
-            <span className="v">{data.onChain.ngoId}</span>
+            <span className="v">
+              {ngo?.name ?? data.onChain.ngoId}
+              {ngo && (
+                <span
+                  className="mono"
+                  style={{ color: "var(--text-dim)", fontSize: "0.72rem", marginLeft: "0.5rem" }}
+                >
+                  ({data.onChain.ngoId})
+                </span>
+              )}
+            </span>
 
             <span className="k">Cause</span>
             <span className="v">{data.onChain.cause}</span>
