@@ -1,6 +1,7 @@
 // app/donations/page.jsx
 "use client";
 import { useEffect, useState } from "react";
+import { useReveal } from "@/app/hooks/useReveal";
 
 function timeAgo(ts) {
   const diff = Date.now() - ts;
@@ -16,6 +17,8 @@ function timeAgo(ts) {
 export default function DonationsPage() {
   const [donations, setDonations] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  useReveal([donations, loading]);
 
   useEffect(() => {
     fetch("/api/init")
@@ -44,13 +47,13 @@ export default function DonationsPage() {
 
   return (
     <div>
-      <div className="page-header">
+      <div className="page-header reveal">
         <h1>All donations</h1>
-        <p>Every donation recorded on TrustGive. Click any one to see its live timeline.</p>
+        <p>Every donation recorded on ChainCare. Click any one to see its live timeline.</p>
       </div>
 
       {donations.length === 0 ? (
-        <div className="empty">
+        <div className="empty reveal">
           <span className="empty-icon">📭</span>
           <p>No donations yet.</p>
           <a href="/donate" className="btn" style={{ marginTop: "1rem" }}>
@@ -59,17 +62,17 @@ export default function DonationsPage() {
         </div>
       ) : (
         <div style={{ display: "grid", gap: "0.75rem" }}>
-          {donations.map((d) => (
+          {donations.map((d, i) => (
             <a
               key={d.donationId}
               href={`/track/${d.donationId}`}
-              className="card"
+              className="card reveal"
               style={{
                 marginBottom: 0,
                 textDecoration: "none",
                 color: "inherit",
                 display: "block",
-                transition: "all 0.25s ease",
+                transitionDelay: `${60 + i * 50}ms`,
               }}
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "1rem" }}>

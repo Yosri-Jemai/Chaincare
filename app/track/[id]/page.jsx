@@ -1,18 +1,21 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import { useReveal } from "@/app/hooks/useReveal";
 
 const STATUS_META = [
-  { label: "Received",   cls: "badge-received" },
-  { label: "Partial",    cls: "badge-partial" },
-  { label: "Released",   cls: "badge-full" },
-  { label: "Refunded",   cls: "badge-refund" },
+  { label: "Received", cls: "badge-received" },
+  { label: "Partial",  cls: "badge-partial" },
+  { label: "Released", cls: "badge-full" },
+  { label: "Refunded", cls: "badge-refund" },
 ];
 
 export default function TrackPage() {
   const { id } = useParams();
   const [data, setData] = useState(null);
   const [lastUpdate, setLastUpdate] = useState(null);
+
+  useReveal([data]);
 
   useEffect(() => {
     async function load() {
@@ -43,7 +46,7 @@ export default function TrackPage() {
 
   return (
     <div>
-      <div className="page-header">
+      <div className="page-header reveal">
         <span className="badge badge-live" style={{ marginBottom: "0.75rem" }}>
           Live · refreshing every 3s
         </span>
@@ -58,7 +61,7 @@ export default function TrackPage() {
       </div>
 
       {data.onChain && (
-        <div className="card card-glow">
+        <div className="card card-glow reveal" style={{ transitionDelay: "80ms" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem" }}>
             <h2 style={{ fontSize: "1rem" }}>On-chain state</h2>
             {sMeta && <span className={`badge ${sMeta.cls}`}>{sMeta.label}</span>}
@@ -82,7 +85,6 @@ export default function TrackPage() {
             <span className="k">Released</span>
             <span className="v"><strong>{data.onChain.released}</strong> HBAR</span>
 
-            {/* NEW — what's still locked */}
             <span className="k">Remaining</span>
             <span className="v">
               <strong style={{ color: "var(--accent)" }}>
@@ -97,7 +99,7 @@ export default function TrackPage() {
         </div>
       )}
 
-      <div className="card">
+      <div className="card reveal" style={{ transitionDelay: "160ms" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.5rem" }}>
           <h2 style={{ fontSize: "1rem" }}>Timeline</h2>
           <a

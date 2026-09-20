@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Inter, JetBrains_Mono } from "next/font/google";
+import CursorGlow from "./components/CursorGlow";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -16,7 +17,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata = {
-  title: "TrustGive — Real-time donation transparency",
+  title: "ChainCare — Real-time donation transparency",
   description: "Every step of your donation, verifiable on Hedera.",
 };
 
@@ -24,12 +25,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <body>
+        <CursorGlow />
         <nav className="nav">
-          <a href="/" className="nav-brand">TrustGive</a>
+          <a href="/" className="nav-brand">ChainCare</a>
           <div className="nav-links">
             <a href="/donate">Donate</a>
             <a href="/donations">Donations</a>
-            <a href="/feed">Feed</a>
+            <a href="/feed">Causes</a>
             <a href="/ngo">NGO</a>
           </div>
         </nav>

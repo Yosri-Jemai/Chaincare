@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import DonationEscrowABI from "@/lib/hedera/DonationEscrowABI.json";
+import { useReveal } from "@/app/hooks/useReveal";
 
 const QUICK_AMOUNTS = [1, 5, 10, 25];
 
@@ -16,6 +17,8 @@ export default function DonatePage() {
   const [statusKind, setStatusKind] = useState("info");
   const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  useReveal([ngos, loading, feeInfo]);
 
   useEffect(() => {
     fetch("/api/ngos")
@@ -58,7 +61,7 @@ export default function DonatePage() {
 
       setStatus("Waiting for wallet signature…");
       const tx = await contract.donate(donationId, ngoId, cause, {
-      value: ethers.parseEther(String(amount)),
+        value: ethers.parseEther(String(amount)),
       });
 
       setStatus("Submitted. Waiting for consensus…");
@@ -86,7 +89,6 @@ export default function DonatePage() {
   }
 
   const fee = feeInfo ? (amount * feeInfo.percent) / 100 : 0;
-  const selected = ngos.find((n) => n.ngoId === ngoId);
 
   if (loading) {
     return (
@@ -105,17 +107,31 @@ export default function DonatePage() {
 
   return (
     <div>
-      <div className="page-header">
+      <div className="page-header reveal">
         <h1>Donate</h1>
         <p>Choose a cause. Every donation is escrowed and tracked on-chain.</p>
       </div>
 
       {!account ? (
-        <button onClick={connect} className="btn" style={{ marginBottom: "1.5rem" }}>
+        <button
+          onClick={connect}
+          className="btn reveal"
+          style={{ marginBottom: "1.5rem", transitionDelay: "60ms" }}
+        >
           Connect MetaMask
         </button>
       ) : (
-        <div className="card" style={{ padding: "0.75rem 1rem", marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
+        <div
+          className="card reveal"
+          style={{
+            padding: "0.75rem 1rem",
+            marginBottom: "1.5rem",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.75rem",
+            transitionDelay: "60ms",
+          }}
+        >
           <span className="badge badge-live">Connected</span>
           <span className="mono" style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>
             {account.slice(0, 6)}…{account.slice(-4)}
@@ -125,18 +141,19 @@ export default function DonatePage() {
 
       <form onSubmit={donate}>
         {/* NGO selection */}
-        <div className="field">
+        <div className="field reveal" style={{ transitionDelay: "120ms" }}>
           <label>Choose a cause</label>
           <div className="ngo-grid">
-            {ngos.map((n) => (
+            {ngos.map((n, i) => (
               <div
                 key={n.ngoId}
-                className={`ngo-card ${ngoId === n.ngoId ? "selected" : ""}`}
+                className={`ngo-card reveal ${ngoId === n.ngoId ? "selected" : ""}`}
+                style={{ transitionDelay: `${160 + i * 70}ms` }}
                 onClick={() => setNgoId(n.ngoId)}
               >
                 <div className="ngo-header">
                   <div className="ngo-avatar">
-                    {n.name.split(" ").map(w => w[0]).slice(0, 2).join("")}
+                    {n.name.split(" ").map((w) => w[0]).slice(0, 2).join("")}
                   </div>
                   <div style={{ flex: 1 }}>
                     <h3>{n.name}</h3>
@@ -149,7 +166,7 @@ export default function DonatePage() {
         </div>
 
         {/* Amount */}
-        <div className="field" style={{ marginTop: "1.5rem" }}>
+        <div className="field reveal" style={{ marginTop: "1.5rem", transitionDelay: "120ms" }}>
           <label>Amount</label>
           <div className="amount-group">
             {QUICK_AMOUNTS.map((v) => (
@@ -175,7 +192,7 @@ export default function DonatePage() {
         </div>
 
         {/* Cause note */}
-        <div className="field">
+        <div className="field reveal" style={{ transitionDelay: "120ms" }}>
           <label>Campaign note</label>
           <input
             value={cause}
@@ -187,7 +204,7 @@ export default function DonatePage() {
 
         {/* Fee breakdown */}
         {feeInfo && (
-          <div className="fee-box">
+          <div className="fee-box reveal" style={{ transitionDelay: "120ms" }}>
             <div className="row">
               <span>Platform fee · {feeInfo.percent}%</span>
               <span>{fee.toFixed(4)} HBAR</span>
@@ -205,8 +222,9 @@ export default function DonatePage() {
 
         <button
           type="submit"
-          className="btn btn-full"
+          className="btn btn-full reveal"
           disabled={busy || !ngoId}
+          style={{ transitionDelay: "160ms" }}
         >
           {busy ? (
             <>
@@ -220,7 +238,7 @@ export default function DonatePage() {
       </form>
 
       {status && (
-        <div className={`status ${statusKind === "error" ? "error" : statusKind === "success" ? "success" : ""}`}>
+        <div className={`status reveal ${statusKind === "error" ? "error" : statusKind === "success" ? "success" : ""}`}>
           {status}
         </div>
       )}

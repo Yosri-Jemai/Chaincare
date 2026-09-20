@@ -1,6 +1,7 @@
 // app/ngo/page.jsx
 "use client";
 import { useEffect, useState } from "react";
+import { useReveal } from "@/app/hooks/useReveal";
 
 const EVENT_TYPES = [
   { value: "funds_allocated",         label: "Funds allocated",        releases: false },
@@ -20,6 +21,8 @@ export default function NGOConsole() {
   const [statusKind, setStatusKind] = useState("info");
   const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  useReveal([donations, loading, eventType]);
 
   useEffect(() => {
     fetch("/api/init")
@@ -74,13 +77,13 @@ export default function NGOConsole() {
 
   return (
     <div>
-      <div className="page-header">
+      <div className="page-header reveal">
         <h1>NGO Console</h1>
         <p>Log progress on a donation. Releases money from escrow when applicable.</p>
       </div>
 
       <form onSubmit={submit}>
-        <div className="field">
+        <div className="field reveal" style={{ transitionDelay: "60ms" }}>
           <label>Donation</label>
           {donations.length > 0 ? (
             <select
@@ -103,7 +106,7 @@ export default function NGOConsole() {
           )}
         </div>
 
-        <div className="field">
+        <div className="field reveal" style={{ transitionDelay: "120ms" }}>
           <label>Event type</label>
           <select value={eventType} onChange={(e) => setEventType(e.target.value)}>
             {EVENT_TYPES.map((t) => (
@@ -115,7 +118,7 @@ export default function NGOConsole() {
         </div>
 
         {needsAmount && (
-          <div className="field">
+          <div className="field reveal" style={{ transitionDelay: "180ms" }}>
             <label>Amount to release</label>
             <div className="amount-input-wrap">
               <input
@@ -134,7 +137,7 @@ export default function NGOConsole() {
           </div>
         )}
 
-        <div className="field">
+        <div className="field reveal" style={{ transitionDelay: "240ms" }}>
           <label>Description</label>
           <input
             value={description}
@@ -144,7 +147,12 @@ export default function NGOConsole() {
           />
         </div>
 
-        <button type="submit" className="btn btn-full" disabled={busy || !donationId}>
+        <button
+          type="submit"
+          className="btn btn-full reveal"
+          disabled={busy || !donationId}
+          style={{ transitionDelay: "300ms" }}
+        >
           {busy ? (
             <>
               <span className="spinner" />
@@ -157,7 +165,7 @@ export default function NGOConsole() {
       </form>
 
       {status && (
-        <div className={`status ${statusKind === "error" ? "error" : statusKind === "success" ? "success" : ""}`}>
+        <div className={`status reveal ${statusKind === "error" ? "error" : statusKind === "success" ? "success" : ""}`}>
           {status}
         </div>
       )}

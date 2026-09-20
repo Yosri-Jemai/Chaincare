@@ -1,10 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useReveal } from "@/app/hooks/useReveal";
 
 export default function FeedPage() {
   const [ngos, setNgos] = useState([]);
   const [feeInfo, setFeeInfo] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  useReveal([ngos, loading, feeInfo]);
 
   useEffect(() => {
     fetch("/api/init").catch(() => {});
@@ -16,7 +19,7 @@ export default function FeedPage() {
 
   return (
     <div>
-      <div className="page-header">
+      <div className="page-header reveal">
         <h1>
           <span className="text-gradient">Verified</span> causes
         </h1>
@@ -24,7 +27,7 @@ export default function FeedPage() {
       </div>
 
       {feeInfo && (
-        <div className="card card-glow">
+        <div className="card card-glow reveal" style={{ transitionDelay: "60ms" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
             <div className="ngo-avatar" style={{ background: "linear-gradient(135deg, #10b981, #22d3ee)" }}>
               %
@@ -55,12 +58,12 @@ export default function FeedPage() {
           {ngos.map((n, i) => (
             <div
               key={n.ngoId}
-              className="ngo-card"
-              style={{ animationDelay: `${i * 0.08}s` }}
+              className="ngo-card reveal"
+              style={{ transitionDelay: `${120 + i * 80}ms` }}
             >
               <div className="ngo-header">
                 <div className="ngo-avatar">
-                  {n.name.split(" ").map(w => w[0]).slice(0, 2).join("")}
+                  {n.name.split(" ").map((w) => w[0]).slice(0, 2).join("")}
                 </div>
                 <div style={{ flex: 1 }}>
                   <h3>{n.name}</h3>
@@ -74,7 +77,7 @@ export default function FeedPage() {
           ))}
         </div>
       ) : (
-        <div className="empty">
+        <div className="empty reveal">
           <span className="empty-icon">🏛️</span>
           <p>No NGOs registered yet.</p>
         </div>
