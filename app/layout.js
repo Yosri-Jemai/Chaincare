@@ -1,6 +1,7 @@
 import "./globals.css";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import CursorGlow from "./components/CursorGlow";
+import Nav from "./components/Nav";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -17,8 +18,13 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata = {
-  title: "ChainCare — Real-time donation transparency",
+  title: "ChainCare",
   description: "Every step of your donation, verifiable on Hedera.",
+  icons: {
+    icon: "/chaincare-logo.png",
+    shortcut: "/chaincare-logo.png",
+    apple: "/chaincare-logo.png",
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -26,15 +32,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <body>
         <CursorGlow />
-        <nav className="nav">
-          <a href="/" className="nav-brand">ChainCare</a>
-          <div className="nav-links">
-            <a href="/donate">Donate</a>
-            <a href="/donations">Donations</a>
-            <a href="/feed">Causes</a>
-            <a href="/ngo">NGO</a>
-          </div>
-        </nav>
+        <Nav />
         <main>{children}</main>
       </body>
     </html>
