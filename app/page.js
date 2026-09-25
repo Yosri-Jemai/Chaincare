@@ -98,15 +98,15 @@ export default function Home() {
       {/* ─────────────────────────  LIVE STATS  ───────────────────────── */}
       <div className="stats reveal">
         <div className="stat">
-          <div className="stat-value">{stats.donations}</div>
+          <div className="stat-value">{Number(stats.donations || 0)}</div>
           <div className="stat-label">Donations tracked</div>
         </div>
         <div className="stat">
-          <div className="stat-value">{stats.ngos}</div>
+          <div className="stat-value">{Number(stats.ngos || 0)}</div>
           <div className="stat-label">Verified NGOs</div>
         </div>
         <div className="stat">
-          <div className="stat-value">{stats.volume.toFixed(2)}</div>
+          <div className="stat-value">{Number(stats.volume || 0).toFixed(2)}</div>
           <div className="stat-label">HBAR donated</div>
         </div>
         <div className="stat">

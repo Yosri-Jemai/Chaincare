@@ -3,13 +3,22 @@ import { NextResponse } from "next/server";
 import { getAllDonations } from "@/lib/store";
 import { getDonationOnChain } from "@/lib/hedera/contract";
 
+const SAFE = {
+  donations: 0,
+  totalDonated: 0,
+  totalReleased: 0,
+  inEscrow: 0,
+  degraded: true,
+};
+
 export async function GET() {
   try {
     const cached = await getAllDonations();
 
-    // Fetch the authoritative amount from the contract for each donation
     const states = await Promise.all(
-      cached.map((d) => getDonationOnChain(d.donationId).catch(() => null))
+      cached.map((d) =>
+        getDonationOnChain(d.donationId).catch(() => null)
+      )
     );
 
     let totalDonated = 0;
@@ -30,8 +39,10 @@ export async function GET() {
       totalDonated: +totalDonated.toFixed(4),
       totalReleased: +totalReleased.toFixed(4),
       inEscrow: +inEscrow.toFixed(4),
+      degraded: false,
     });
   } catch (err) {
-    return NextResponse.json({ error: String(err) }, { status: 500 });
+    console.error("[/api/stats]", err);
+    return NextResponse.json(SAFE);
   }
 }
